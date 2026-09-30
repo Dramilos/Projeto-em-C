@@ -5,7 +5,7 @@ typedef struct elo          // estrutura dos dados que v�o pra lista
 {
 
     int codSol;         // informacao que sera guardada na lista]
-    char codEqu[6];
+    char codEqu[7];
     char nomeEqu[20];
     int periodo;
     int prioridade;
@@ -45,7 +45,17 @@ Lista* CriaUmaLista()       // estrutura que cria uma lista qualquer
 
 }
 
-Elo* CriarElo(Elo* Antigo, int codSol, char codEqu[], int prioridade, char nomeEqu[])
+int TaVazia(Lista *manutencao)
+{
+    if (manutencao ->inicio == NULL)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+Elo* CriarElo(Elo* Antigo, int codSol, char codEqu[], int prioridade, char nomeEqu[], int periodo)
 {
     Elo *NovoElo;
     NovoElo = (Elo *) malloc(sizeof(Elo));
@@ -66,9 +76,35 @@ Elo* CriarElo(Elo* Antigo, int codSol, char codEqu[], int prioridade, char nomeE
         NovoElo ->nomeEqu[i] = nomeEqu[i];
     }
 
+    NovoElo ->periodo = periodo;
+
     NovoElo ->proximo = Antigo;
 
     return NovoElo;
+}
+
+void InsereNaLista(Lista *manutencao, int codSol, char codEqu[], int prioridade, char nomeEqu[], int periodo)
+{
+    Elo aux1, aux2;
+    aux1 = manutencao ->inicio;
+
+    if (TaVazia(manutencao) == 1)
+    {
+        manutencao ->inicio = CriarElo(manutencao ->inicio, codSol, codEqu, prioridade, nomeEqu, periodo);
+    }
+    else
+    {
+        while(aux1 )
+        if (codSol < aux1 ->codSol)
+        {
+
+        }
+        else
+        {
+            aux2 = aux1;
+            aux1 = aux1 ->proximo;
+        }
+    }
 }
 
 /*
@@ -83,11 +119,6 @@ Elo* CriarEloFinal(Lista* Antigo, int v)
     return NovoElo;
 }
 */
-
-void InsereNaLista(Lista *EloAntigo, int codSol, char codEqu[], int prioridade, char nomeEqu[])
-{
-    EloAntigo ->inicio = CriarElo(EloAntigo ->inicio, codSol, codEqu, prioridade, nomeEqu);
-}
 
 /*
 void InsereNoFim(Lista *cartelinha, int ValorInserido)
@@ -107,13 +138,122 @@ void InsereNoFim(Lista *cartelinha, int ValorInserido)
 void ImprimeLista(Lista *manutencaozinha)
 {
     Elo *aux = manutencaozinha ->inicio;
+    int cont = 1;
+
+    system("cls");
+    printf("\n-=-=-=-=-=-\n IMPRIMINDO NOME DOS ELEMENTOS INSERIDOS\n-=-=-=-=-=- ");
 
     while (aux != NULL)
     {
-        printf("\n -%s", aux ->nomeEqu);
+        printf("%i", cont);
+        printf("\n NOME -%s", aux ->nomeEqu);
+        printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
         aux = aux ->proximo;
+        cont++;
+    }
+
+    printf("\n\n -Digite 1 para prosseguir");
+    scanf("%i", &cont);
+}
+
+void AdicionarElementos (Lista *manutencao)
+{
+    int quant;
+
+    system("cls");
+
+    printf("1 - ADICIONAR EQUIPAMENTOS\n");
+    printf("deseja inserir quantos equipamentos na lista? ");
+    scanf("%i", &quant);
+    flush();
+
+    for(int i = 0; i < quant; i++)
+    {
+        int codSol, periodo, prioridade, flag;
+        char codEqu[7], nomeEqu[21];
+
+        system("cls");
+
+        printf("EQUIPAMENTO %i", i + 1);
+        printf("\ndigite o nome do equipamento: ");
+        fgets(nomeEqu, sizeof(nomeEqu), stdin);
+        nomeEqu[strcspn(nomeEqu, "\n")] = '\0';         // tira o enter da string
+
+        do
+        {
+            printf("\ndigite o codigo do equipamento (123abc): ");
+            fgets(codEqu, sizeof(codEqu), stdin);
+            nomeEqu[strcspn(nomeEqu, "\n")] = '\0';
+            flush();
+
+            if (strlen(codEqu) < 6)
+            {
+                printf("\ttamanho incorreto. Tente novamente.");
+            }
+
+        } while (strlen(codEqu) < 6);
+
+        do
+        {
+            printf("\ndigite o codigo de solicitacao (0123): ");
+            scanf("%d",&codSol);
+
+            if (codSol < 1000 || codSol > 9999)
+            {
+                printf("\ttamanho incorreto. Tente novamente.");
+            }
+        } while (codSol < 1000 || codSol > 9999);
+
+        do
+        {
+            printf("\ndigite a prioridade do equipamento (1 - 3): ");
+            scanf("%d",&prioridade);
+
+            if (prioridade > 3)
+            {
+                printf("\ttamanho incorreto. Tente novamente.");
+            }
+        } while (prioridade > 3);
+
+        do
+        {
+            flag = 0;
+
+            printf("\nqual o periodo de reparo necessario para o equipamento? ");
+            scanf("%d",&periodo);
+
+            switch (prioridade)
+            {
+            case 1:
+                if (periodo > 7)
+                {
+                    printf(" -O periodo nao condiz com a prioridade (0 - 7)");
+                    flag = 1;
+                }
+                break;
+            case 2:
+                if (periodo > 15)
+                {
+                    printf(" -O periodo nao condiz com a prioridade (0 - 15)");
+                    flag = 1;
+                }
+                break;
+            case 3:
+                if (periodo > 20)
+                {
+                    printf(" -O periodo nao condiz com a prioridade (0 - 20)");
+                    flag = 1;
+                }
+                break;
+            }
+        } while (flag == 1);
+
+        flush();
+
+        InsereNaLista(manutencao, codSol, codEqu, prioridade, nomeEqu, prioridade);
     }
 }
+
 
 /*
 
@@ -166,16 +306,6 @@ int ProcuraElemento(Lista *cartelinha, int valor)
     }
     printf("\nValor nao encontrado");
     return 0;
-}
-
-bool TaVazia(Lista *cartelinha)
-{
-    if (cartelinha ->inicio == NULL)
-    {
-        return true;
-    }
-
-    return false;
 }
 
 int Quantidade (Lista *cartelinha)

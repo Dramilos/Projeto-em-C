@@ -2,81 +2,40 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <windows.h>
 #include "FUNCS.h"
 
 int main()
 {
-    system("clear");
+    system("cls");
 
     Lista *manutencao;
-    int quant;
+    int opcao;
 
     manutencao = IniciaLista();
     manutencao = CriaUmaLista();
 
-    printf("deseja inserir quantos equipamentos na lista? ");
-    scanf("%i", &quant);
-
-    flush();
-
-    while (quant > 0)
+    do
     {
-        int codSol, periodo, prioridade;
-        char codEqu[7], nomeEqu[21];
+        system("cls");
 
-        printf("EQUIPAMENTO %i", quant);
+        printf("==================\n\tMENU\n====================\n");
+        printf("1 - Adicionar itens\n2 - Listar itens\n3 - bomb\n");
+        scanf("%i", &opcao);
 
-        printf("\ndigite o nome do equipamento: ");
-        fgets(nomeEqu, sizeof(nomeEqu), stdin);
-        nomeEqu[strcspn(nomeEqu, "\n")] = '\0';         // tira o enter da string
-
-        do
+        switch (opcao)
         {
-            printf("\ndigite o codigo do equipamento: ");
-            fgets(codEqu, sizeof(codEqu), stdin);
-            nomeEqu[strcspn(nomeEqu, "\n")] = '\0';
-
-            if (strlen(codEqu) < 6)
-            {
-                printf("\ttamanho incorreto. Tente novamente.");
-            }
-
-        } while (strlen(codEqu) < 6);
-
-        do
-        {
-            printf("\ndigite o codigo de solicitacao: ");
-            scanf("%d",&codSol);
-
-            if (codSol < 1000 || codSol > 9999)
-            {
-                printf("\ttamanho incorreto. Tente novamente.");
-            }
-        } while (codSol < 1000 || codSol > 9999);
-
-        flush();
-
-        do
-        {
-            printf("\ndigite a prioridade do equipamento: ");
-            scanf("%d",&prioridade);
-
-            if (prioridade > 3)
-            {
-                printf("\ttamanho incorreto. Tente novamente.");
-            }
-        } while (prioridade > 3);
-
-        flush();
-
-        InsereNaLista(manutencao, codSol, codEqu, prioridade, nomeEqu);
-
-        quant--;
-    }
-
-    printf("\n-=-=-=-=-=-\n IMPRIMINDO NOME DOS ELEMENTOS INSERIDOS\n-=-=-=-=-=- ");
-
-    ImprimeLista(manutencao);
+        case 1:
+            AdicionarElementos(manutencao);
+            break;
+        case 2:
+            ImprimeLista(manutencao);
+            break;
+        default:
+            exit(0);
+            break;
+        }
+    } while(opcao != 5);
 
     return 0;
 }

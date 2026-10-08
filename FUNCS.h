@@ -98,16 +98,23 @@ void ImprimeLista(Lista *manutencaozinha)
     Elo *aux = manutencaozinha ->inicio;
     int cont = 1;
 
-    system("cls");
-    printf("\n-=-=-=-=-=-\n IMPRIMINDO NOME DOS ELEMENTOS INSERIDOS\n-=-=-=-=-=- ");
+    system("clear");
+    printf("\n-=-=-=-=-=-\n IMPRIMINDO NOME DOS ELEMENTOS INSERIDOS\n-=-=-=-=-=-\n");
 
-    while (aux != NULL)
+    if(manutencaozinha ->inicio == NULL)
     {
-        printf("%i", cont);
-        printf("\n NOME -%s", aux ->nomeEqu);
-        printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
-        aux = aux ->proximo;
-        cont++;
+        printf("Parece que nao tem nada aqui\n");
+    }
+    else
+    {
+        while (aux != NULL)
+        {
+            printf("%i", cont);
+            printf("\n NOME -%s", aux ->nomeEqu);
+            printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
+            aux = aux ->proximo;
+            cont++;
+        }
     }
 
     printf("\n\n -Digite 1 para prosseguir");
@@ -118,7 +125,7 @@ void AdicionarElementos (Lista *manutencao)
 {
     int quant;
 
-    system("cls");
+    system("clear");
 
     printf("1 - ADICIONAR EQUIPAMENTOS\n");
     printf("deseja inserir quantos equipamentos na lista? ");
@@ -130,7 +137,7 @@ void AdicionarElementos (Lista *manutencao)
         int codSol, periodo, prioridade, flag;
         char codEqu[7], nomeEqu[21];
 
-        system("cls");
+        system("clear");
 
         printf("EQUIPAMENTO %i", i + 1);
         printf("\ndigite o nome do equipamento: ");
@@ -144,12 +151,29 @@ void AdicionarElementos (Lista *manutencao)
             codEqu[strcspn(codEqu, "\n")] = '\0';
             flush();
 
-            if (strlen(codEqu) < 6)
+            if (strlen(codEqu) != 6)
             {
                 printf("\ttamanho incorreto. Tente novamente.");
             }
+            else
+            {
+                for(int j = 0; j < 3; j++)
+                {
+                    if(isdigit(codEqu[j]))
+                    {
+                        printf("%i é digito\n", j + 1);
+                    }
+                }
+                for(int j = 3; j < 6; j++)
+                {
+                    if(isalpha(codEqu[j]))
+                    {
+                        printf("%i é uma letra\n", j + 1);
+                    }
+                }
+            }
 
-        } while (strlen(codEqu) < 6);
+        } while (strlen(codEqu) != 6);
 
         do
         {
@@ -214,6 +238,17 @@ void AdicionarElementos (Lista *manutencao)
 
 
 /*
+
+
+int TiraDaLista(Lista *listaAntiga)
+{
+    int valor;
+
+    valor = listaAntiga ->inicio ->informacao;
+    listaAntiga ->inicio = AuxTiraDaLista(listaAntiga ->inicio);
+
+    return valor;
+}
 */
 
 Elo* AuxTiraDaLista(Elo *antigo)
@@ -227,28 +262,20 @@ Elo* AuxTiraDaLista(Elo *antigo)
     return antigo;
 }
 
-int TiraDaLista(Lista *listaAntiga)
-{
-    int valor;
-
-    valor = listaAntiga ->inicio ->informacao;
-    listaAntiga ->inicio = AuxTiraDaLista(listaAntiga ->inicio);
-
-    return valor;
-}
-
-
 void LimparLista(Lista *apague)
 {
     int valor;
 
     while (apague ->inicio != NULL)
     {
-        valor = apague ->inicio ->informacao;
+        valor = apague ->inicio ->codSol;
         apague ->inicio = AuxTiraDaLista(apague ->inicio);
 
         printf("REMOVIDO: %i\n", valor);
     }
+
+    printf("Lista de manutencao limpa! Digite 1 para retornar\n");
+    scanf("%i", &valor);
 }
 
 /*

@@ -2,12 +2,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include <windows.h>
 #include "FUNCS.h"
 
 int main()
 {
-    system("cls");
+    system("clear");
 
     Lista *manutencao;
     int opcao;
@@ -17,10 +16,10 @@ int main()
 
     do
     {
-        system("cls");
+        system("clear");
 
         printf("==================\n\tMENU\n====================\n");
-        printf("1 - Adicionar itens\n2 - Listar itens\n3 - bomb\n");
+        printf("1 - Adicionar itens\n2 - Listar itens\n3 - limpar lista\n4 - bomb\n");
         scanf("%i", &opcao);
 
         switch (opcao)
@@ -31,11 +30,16 @@ int main()
         case 2:
             ImprimeLista(manutencao);
             break;
+        case 3:
+            LimparLista(manutencao);
+            break;
         default:
             exit(0);
             break;
         }
     } while(opcao != 5);
+
+    free(manutencao);
 
     return 0;
 }

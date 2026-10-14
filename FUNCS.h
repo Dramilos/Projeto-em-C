@@ -55,66 +55,101 @@ int TaVazia(Lista *manutencao)
     return 0;
 }
 
-void InsereNaLista(Lista *manutencao, int codSol, char codEqu[], int prioridade, char nomeEqu[], int periodo)
+Elo* CriarElo(Elo* Antigo, int codSol, char codEqu[], int prioridade, char nomeEqu[], int periodo)
 {
-    Elo *NovoElo, *aux1, *aux2;
+    Elo *NovoElo;
     NovoElo = (Elo *) malloc(sizeof(Elo));
 
     // passando as informaçoes pro novo elo
 
     NovoElo ->codSol = codSol;
-    strcpy(NovoElo ->codEqu, codEqu);
-    NovoElo ->prioridade = prioridade;
-    strcpy(NovoElo ->nomeEqu, nomeEqu);
-    NovoElo ->periodo = periodo;
 
-    // logica de inserçao
-
-    aux1 = manutencao ->inicio;
-    aux2 = NULL;
-
-    // caminhar pela lista até achar a posicao necessária
-
-    while ((aux1 != NULL) && (NovoElo ->codSol > aux1 ->codSol))
+    for(int i = 0; codEqu[i] != '\0'; i++)
     {
-        aux2 = aux1;
-        aux1 = aux1 ->proximo;
+        NovoElo ->codEqu[i] = codEqu[i];
     }
 
-    NovoElo ->proximo = aux1;
+    NovoElo ->prioridade = prioridade;
 
-    if(aux2 == NULL)
+    for(int i = 0; nomeEqu[i] != '\0'; i++)
     {
-        manutencao ->inicio = NovoElo;
+        NovoElo ->nomeEqu[i] = nomeEqu[i];
+    }
+
+    NovoElo ->periodo = periodo;
+
+    NovoElo ->proximo = Antigo;
+
+    return NovoElo;
+}
+
+void InsereNaLista(Lista *manutencao, int codSol, char codEqu[], int prioridade, char nomeEqu[], int periodo)
+{
+    Elo aux1, aux2;
+    aux1 = manutencao ->inicio;
+
+    if (TaVazia(manutencao) == 1)
+    {
+        manutencao ->inicio = CriarElo(manutencao ->inicio, codSol, codEqu, prioridade, nomeEqu, periodo);
     }
     else
     {
-        aux2 ->proximo = NovoElo;
+        while(aux1 )
+        if (codSol < aux1 ->codSol)
+        {
+
+        }
+        else
+        {
+            aux2 = aux1;
+            aux1 = aux1 ->proximo;
+        }
     }
 }
+
+/*
+Elo* CriarEloFinal(Lista* Antigo, int v)
+{
+    Elo *NovoElo;
+    NovoElo = (Elo *) malloc(sizeof(Elo));
+
+    NovoElo ->informacao = ;
+    NovoElo ->proximo = NULL;
+
+    return NovoElo;
+}
+*/
+
+/*
+void InsereNoFim(Lista *cartelinha, int ValorInserido)
+{
+    Elo *aux = cartelinha ->inicio;
+
+    while(aux ->proximo != NULL)
+    {
+        aux = aux ->proximo;
+    }
+
+    aux ->proximo = CriarEloFinal(cartelinha, ValorInserido);
+}
+
+*/
 
 void ImprimeLista(Lista *manutencaozinha)
 {
     Elo *aux = manutencaozinha ->inicio;
     int cont = 1;
 
-    system("clear");
-    printf("\n-=-=-=-=-=-\n IMPRIMINDO NOME DOS ELEMENTOS INSERIDOS\n-=-=-=-=-=-\n");
+    system("cls");
+    printf("\n-=-=-=-=-=-\n IMPRIMINDO NOME DOS ELEMENTOS INSERIDOS\n-=-=-=-=-=- ");
 
-    if(manutencaozinha ->inicio == NULL)
+    while (aux != NULL)
     {
-        printf("Parece que nao tem nada aqui\n");
-    }
-    else
-    {
-        while (aux != NULL)
-        {
-            printf("%i", cont);
-            printf("\n NOME -%s", aux ->nomeEqu);
-            printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
-            aux = aux ->proximo;
-            cont++;
-        }
+        printf("%i", cont);
+        printf("\n NOME -%s", aux ->nomeEqu);
+        printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
+        aux = aux ->proximo;
+        cont++;
     }
 
     printf("\n\n -Digite 1 para prosseguir");
@@ -125,7 +160,7 @@ void AdicionarElementos (Lista *manutencao)
 {
     int quant;
 
-    system("clear");
+    system("cls");
 
     printf("1 - ADICIONAR EQUIPAMENTOS\n");
     printf("deseja inserir quantos equipamentos na lista? ");
@@ -137,7 +172,7 @@ void AdicionarElementos (Lista *manutencao)
         int codSol, periodo, prioridade, flag;
         char codEqu[7], nomeEqu[21];
 
-        system("clear");
+        system("cls");
 
         printf("EQUIPAMENTO %i", i + 1);
         printf("\ndigite o nome do equipamento: ");
@@ -148,32 +183,15 @@ void AdicionarElementos (Lista *manutencao)
         {
             printf("\ndigite o codigo do equipamento (123abc): ");
             fgets(codEqu, sizeof(codEqu), stdin);
-            codEqu[strcspn(codEqu, "\n")] = '\0';
+            nomeEqu[strcspn(nomeEqu, "\n")] = '\0';
             flush();
 
-            if (strlen(codEqu) != 6)
+            if (strlen(codEqu) < 6)
             {
                 printf("\ttamanho incorreto. Tente novamente.");
             }
-            else
-            {
-                for(int j = 0; j < 3; j++)
-                {
-                    if(isdigit(codEqu[j]))
-                    {
-                        printf("%i é digito\n", j + 1);
-                    }
-                }
-                for(int j = 3; j < 6; j++)
-                {
-                    if(isalpha(codEqu[j]))
-                    {
-                        printf("%i é uma letra\n", j + 1);
-                    }
-                }
-            }
 
-        } while (strlen(codEqu) != 6);
+        } while (strlen(codEqu) < 6);
 
         do
         {
@@ -239,18 +257,6 @@ void AdicionarElementos (Lista *manutencao)
 
 /*
 
-
-int TiraDaLista(Lista *listaAntiga)
-{
-    int valor;
-
-    valor = listaAntiga ->inicio ->informacao;
-    listaAntiga ->inicio = AuxTiraDaLista(listaAntiga ->inicio);
-
-    return valor;
-}
-*/
-
 Elo* AuxTiraDaLista(Elo *antigo)
 {
     Elo *apagar;
@@ -262,23 +268,29 @@ Elo* AuxTiraDaLista(Elo *antigo)
     return antigo;
 }
 
+int TiraDaLista(Lista *listaAntiga)
+{
+    int valor;
+
+    valor = listaAntiga ->inicio ->informacao;
+    listaAntiga ->inicio = AuxTiraDaLista(listaAntiga ->inicio);
+
+    return valor;
+}
+
 void LimparLista(Lista *apague)
 {
     int valor;
 
     while (apague ->inicio != NULL)
     {
-        valor = apague ->inicio ->codSol;
+        valor = apague ->inicio ->informacao;
         apague ->inicio = AuxTiraDaLista(apague ->inicio);
 
         printf("REMOVIDO: %i\n", valor);
     }
-
-    printf("Lista de manutencao limpa! Digite 1 para retornar\n");
-    scanf("%i", &valor);
 }
 
-/*
 int ProcuraElemento(Lista *cartelinha, int valor)
 {
     Elo *aux = cartelinha ->inicio;

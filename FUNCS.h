@@ -287,6 +287,75 @@ void LimparLista(Lista *apague)
     scanf("%i", &valor);
 }
 
+int RemoveDaLista(Lista *manutencao, int codSol)     // retorna 1 se removeu, 0 se nao achou
+{
+    Elo *atual, *anterior;
+
+    atual = manutencao ->inicio;
+    anterior = NULL;
+
+    // caminhar pela lista ate chegar no codigo procurado (ou passar dele)
+
+    while ((atual != NULL) && (atual ->codSol < codSol))
+    {
+        anterior = atual;
+        atual = atual ->proximo;
+    }
+
+    // chegou no fim ou passou do codigo: nao existe na lista
+
+    if ((atual == NULL) || (atual ->codSol != codSol))
+    {
+        return 0;
+    }
+
+    // religar a lista pulando o elo que vai ser apagado
+
+    if (anterior == NULL)
+    {
+        manutencao ->inicio = atual ->proximo;      // era o primeiro da lista
+    }
+    else
+    {
+        anterior ->proximo = atual ->proximo;       // estava no meio ou no fim
+    }
+
+    free(atual);
+
+    return 1;
+}
+
+void RemoverElemento(Lista *manutencao)
+{
+    int codSol;
+
+    system("clear");
+
+    printf("REMOVER SOLICITACAO\n");
+
+    if (TaVazia(manutencao))
+    {
+        printf("Parece que nao tem nada aqui\n");
+    }
+    else
+    {
+        printf("digite o codigo de solicitacao que deseja remover: ");
+        scanf("%d", &codSol);
+
+        if (RemoveDaLista(manutencao, codSol))
+        {
+            printf("Solicitacao %i removida!\n", codSol);
+        }
+        else
+        {
+            printf("Solicitacao %i nao encontrada.\n", codSol);
+        }
+    }
+
+    printf("\nDigite 1 para retornar\n");
+    scanf("%i", &codSol);
+}
+
 /*
 int ProcuraElemento(Lista *cartelinha, int valor)
 {

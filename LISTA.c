@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 #include "FUNCS.h"
 
 int main()
@@ -19,7 +20,7 @@ int main()
         system("clear");
 
         printf("==================\n\tMENU\n====================\n");
-        printf("1 - Adicionar itens\n2 - Listar itens\n3 - limpar lista\n4 - bomb\n");
+        printf("1 - Adicionar itens\n2 - Listar itens\n3 - limpar lista\n4 - Remover solicitacao\n");
         scanf("%i", &opcao);
 
         switch (opcao)
@@ -32,6 +33,9 @@ int main()
             break;
         case 3:
             LimparLista(manutencao);
+            break;
+        case 4:
+            RemoverElemento(manutencao);
             break;
         default:
             exit(0);

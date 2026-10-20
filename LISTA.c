@@ -20,7 +20,7 @@ int main()
         system("clear");
 
         printf("==================\n\tMENU\n====================\n");
-        printf("1 - Adicionar itens\n2 - Listar itens\n3 - limpar lista\n4 - Remover solicitacao\n");
+        printf("1 - Adicionar itens\n2 - Listar itens\n3 - Remover solicitacao\n4 - Limpar lista\n5 - Sair\n");
         scanf("%i", &opcao);
 
         switch (opcao)
@@ -32,10 +32,10 @@ int main()
             ImprimeLista(manutencao);
             break;
         case 3:
-            LimparLista(manutencao);
+            RemoverElemento(manutencao);
             break;
         case 4:
-            RemoverElemento(manutencao);
+            LimparLista(manutencao);
             break;
         default:
             exit(0);

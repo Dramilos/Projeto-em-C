@@ -182,6 +182,8 @@ void AdicionarElementos (Lista *manutencao)
             {
                 printf("\t-Formatacao incorreta! (abc123)");
             }
+
+
         } while (strlen(codEqu) != 6 || flag == 1);
 
         do
@@ -245,21 +247,6 @@ void AdicionarElementos (Lista *manutencao)
     }
 }
 
-
-/*
-
-
-int TiraDaLista(Lista *listaAntiga)
-{
-    int valor;
-
-    valor = listaAntiga ->inicio ->informacao;
-    listaAntiga ->inicio = AuxTiraDaLista(listaAntiga ->inicio);
-
-    return valor;
-}
-*/
-
 Elo* AuxTiraDaLista(Elo *antigo)
 {
     Elo *apagar;
@@ -273,18 +260,27 @@ Elo* AuxTiraDaLista(Elo *antigo)
 
 void LimparLista(Lista *apague)
 {
-    int valor;
+    char opcao;
 
-    while (apague ->inicio != NULL)
+    printf("Tem certeza de que deseja remover todas as solicitações? S | n\n");
+    scanf(" %c", &opcao);
+    getchar();
+
+    if(opcao == 's')
     {
-        valor = apague ->inicio ->codSol;
-        apague ->inicio = AuxTiraDaLista(apague ->inicio);
+        int valor;
 
-        printf("REMOVIDO: %i\n", valor);
+        while (apague ->inicio != NULL)
+        {
+            valor = apague ->inicio ->codSol;
+            apague ->inicio = AuxTiraDaLista(apague ->inicio);
+
+            printf("REMOVIDO: %i\n", valor);
+        }
+
+        printf("Lista de manutencao limpa! Digite 1 para retornar\n");
+        scanf("%i", &valor);
     }
-
-    printf("Lista de manutencao limpa! Digite 1 para retornar\n");
-    scanf("%i", &valor);
 }
 
 int RemoveDaLista(Lista *manutencao, int codSol)     // retorna 1 se removeu, 0 se nao achou
@@ -327,11 +323,11 @@ int RemoveDaLista(Lista *manutencao, int codSol)     // retorna 1 se removeu, 0 
 
 void RemoverElemento(Lista *manutencao)
 {
-    int codSol;
+    int codSol, flag;
 
     system("clear");
 
-    printf("REMOVER SOLICITACAO\n");
+    printf("REMOVER SOLICITACAO\nitens salvos:\n");
 
     if (TaVazia(manutencao))
     {
@@ -339,67 +335,35 @@ void RemoverElemento(Lista *manutencao)
     }
     else
     {
-        printf("digite o codigo de solicitacao que deseja remover: ");
-        scanf("%d", &codSol);
+        flag = 0;
+        Elo *aux = manutencao ->inicio;
 
-        if (RemoveDaLista(manutencao, codSol))
+        while (aux != NULL)
         {
-            printf("Solicitacao %i removida!\n", codSol);
+            printf("\n NOME -%s", aux ->nomeEqu);
+            printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
+            aux = aux ->proximo;
         }
-        else
+        do
         {
-            printf("Solicitacao %i nao encontrada.\n", codSol);
-        }
+            printf("\ndigite o codigo de solicitacao que deseja remover: ");
+            scanf("%d", &codSol);
+
+            if (RemoveDaLista(manutencao, codSol))
+            {
+                printf("Solicitacao %i removida!\n", codSol);
+                flag = 0;
+            }
+            else
+            {
+                printf("Solicitacao %i nao encontrada.\n", codSol);
+                flag = 1;
+            }
+        } while(flag == 1);
     }
 
     printf("\nDigite 1 para retornar\n");
     scanf("%i", &codSol);
 }
 
-/*
-int ProcuraElemento(Lista *cartelinha, int valor)
-{
-    Elo *aux = cartelinha ->inicio;
-
-    while(aux != NULL)
-    {
-        if(aux ->informacao == valor)
-        {
-            printf("\nAchamo o valor");
-            return 1;
-        }
-        aux = aux ->proximo;
-    }
-    printf("\nValor nao encontrado");
-    return 0;
-}
-
-int Quantidade (Lista *cartelinha)
-{
-    int cont = 0;
-    Elo *aux = cartelinha ->inicio;
-
-    while (aux != NULL)
-    {
-        cont++;
-        aux = aux ->proximo;
-    }
-
-    return cont;
-}
-
-int Soma(Lista *cartelinha)
-{
-    int sum = 0;
-    Elo *aux = cartelinha ->inicio;
-
-    while(aux != NULL)
-    {
-        sum += aux->informacao;
-        aux = aux ->proximo;
-    }
-
-    return sum;
-}
-*/
 #endif      // FUNCS_H_INCLUDED

@@ -286,7 +286,7 @@ void AdicionarElementos (Lista *manutencao)
 void ConsultarSolicitacao(Lista *manutencao)
 {
     int codSol, flag;
-    Elo *aux = manutencao ->inicio;
+    Elo *aux;
 
     system("cls");
 
@@ -297,17 +297,22 @@ void ConsultarSolicitacao(Lista *manutencao)
     }
     else
     {
-        printf("codigos disponiveis: ");
-        while (aux != NULL)
-        {
-            printf("\n NOME -%s", aux ->nomeEqu);
-            printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
-            aux = aux ->proximo;
-        }
         do
         {
+            system("cls");
+
+            aux = manutencao ->inicio;
+            printf("codigos disponiveis: ");
+            while (aux != NULL)
+            {
+                printf("\n NOME -%s", aux ->nomeEqu);
+                printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
+                aux = aux ->proximo;
+            }
+
             flag = 0;
             aux = manutencao ->inicio;
+
             printf("Digite o codigo de solicitacao que deseja consultar: \n");
             scanf("%i", &codSol);
 
@@ -323,10 +328,13 @@ void ConsultarSolicitacao(Lista *manutencao)
             if ((aux == NULL) || (aux ->codSol != codSol))
             {
                 printf("\t- O codigo digitado nao existe!\n");
+                system("pause");
                 flag = 1;
             }
             else
             {
+                system("cls");
+                printf("LISTANDO ITEM\n\n");
                 printf("\t- ITEM: %s\n", aux ->nomeEqu);
                 printf("\t- CODIGO DO EQUIPAMENTO: %s\n", aux ->codEqu);
                 printf("\t- CODIGO DE SOLICITACAO: %i\n", aux ->codSol);

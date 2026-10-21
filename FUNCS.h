@@ -117,8 +117,7 @@ void ImprimeLista(Lista *manutencaozinha)
         }
     }
 
-    printf("\n\n -Digite 1 para prosseguir");
-    scanf("%i", &cont);
+    system("pause");
 }
 
 int ExisteCod(Lista *manutencao, int codSol)
@@ -290,33 +289,56 @@ void ConsultarSolicitacao(Lista *manutencao)
     Elo *aux = manutencao ->inicio;
 
     system("cls");
-    printf("codigos disponiveis: ");
-    while (aux != NULL)
-    {
-        printf("\n NOME -%s", aux ->nomeEqu);
-        printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
-        aux = aux ->proximo;
-    }
 
-    do
+    if(TaVazia(manutencao) == 1)
     {
-        flag = 0;
-        printf("Digite o codigo de solicitacao que deseja consultar: \n");
-        scanf("%i", &codSol);
-
-        if(ExisteCod(manutencao, codSol) == 0)
-        {
-            printf("\t- o codigo digitado nao existe\n");
-            flag = 1;
-            scanf("%i", &codSol);
-        }
-        else
-        {
-            printf("coc");
-            scanf("%i", &codSol);
-        }
+        printf("parece que nao tem nada aqui.\n");
+        system("pause");
     }
-    while (flag == 1);
+    else
+    {
+        printf("codigos disponiveis: ");
+        while (aux != NULL)
+        {
+            printf("\n NOME -%s", aux ->nomeEqu);
+            printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
+            aux = aux ->proximo;
+        }
+        do
+        {
+            flag = 0;
+            aux = manutencao ->inicio;
+            printf("Digite o codigo de solicitacao que deseja consultar: \n");
+            scanf("%i", &codSol);
+
+            // caminhar pela lista ate chegar no codigo procurado (ou passar dele)
+
+            while ((aux != NULL) && (aux ->codSol < codSol))
+            {
+                aux = aux ->proximo;
+            }
+
+            // chegou no fim ou passou do codigo: nao existe na lista
+
+            if ((aux == NULL) || (aux ->codSol != codSol))
+            {
+                printf("\t- O codigo digitado nao existe!\n");
+                flag = 1;
+            }
+            else
+            {
+                printf("\t- ITEM: %s\n", aux ->nomeEqu);
+                printf("\t- CODIGO DO EQUIPAMENTO: %s\n", aux ->codEqu);
+                printf("\t- CODIGO DE SOLICITACAO: %i\n", aux ->codSol);
+                printf("\t- PRIORIDADE: %i\n", aux ->prioridade);
+                printf("\t- PERIODO: %i\n", aux ->periodo);
+
+                printf("\nTecle 1 para consultar outra solicitacao, 0 para sair\n");
+                scanf("%i", &flag);
+            }
+        }
+        while (flag == 1);
+    }
 }
 
 Elo* AuxTiraDaLista(Elo *antigo)
@@ -355,8 +377,8 @@ void LimparLista(Lista *apague)
     {
         LimparListaAux(apague);
 
-        printf("Lista de manutencao limpa! Digite 1 para retornar\n");
-        scanf("%c", &opcao);
+        printf("Lista de manutencao limpa!\n");
+        system("pause");
     }
 }
 
@@ -439,8 +461,7 @@ void RemoverElemento(Lista *manutencao)
         } while(flag == 1);
     }
 
-    printf("\nDigite 1 para retornar\n");
-    scanf("%i", &codSol);
+    system("pause");
 }
 
 #endif      // FUNCS_H_INCLUDED

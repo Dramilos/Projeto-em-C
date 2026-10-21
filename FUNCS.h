@@ -101,7 +101,7 @@ void ImprimeLista(Lista *manutencaozinha)
     Elo *aux = manutencaozinha ->inicio;
     int cont = 1;
 
-    system("clear");
+    system("cls");
     printf("\n-=-=-=-=-=-\n IMPRIMINDO NOME DOS ELEMENTOS INSERIDOS\n-=-=-=-=-=-\n");
 
     if(manutencaozinha ->inicio == NULL)
@@ -124,11 +124,34 @@ void ImprimeLista(Lista *manutencaozinha)
     scanf("%i", &cont);
 }
 
+int ExisteCod(Lista *manutencao, int codSol)
+{
+    Elo *aux;
+
+    aux = manutencao ->inicio;
+
+    // caminhar pela lista ate chegar no codigo procurado (ou passar dele)
+
+    while ((aux != NULL) && (aux ->codSol < codSol))
+    {
+        aux = aux ->proximo;
+    }
+
+    // chegou no fim ou passou do codigo: nao existe na lista
+
+    if ((aux == NULL) || (aux ->codSol != codSol))
+    {
+        return 0;
+    }
+
+    return 1;
+}
+
 void AdicionarElementos (Lista *manutencao)
 {
     int quant, flag = 0;
 
-    system("clear");
+    system("cls");
 
     printf("1 - ADICIONAR EQUIPAMENTOS\n");
     printf("deseja inserir quantos equipamentos na lista? ");
@@ -140,7 +163,7 @@ void AdicionarElementos (Lista *manutencao)
         int codSol, periodo, prioridade, flag;
         char codEqu[15], nomeEqu[21];
 
-        system("clear");
+        system("cls");
 
         printf("EQUIPAMENTO %i", i + 1);
         printf("\ndigite o nome do equipamento: ");
@@ -183,11 +206,12 @@ void AdicionarElementos (Lista *manutencao)
                 printf("\t-Formatacao incorreta! (abc123)");
             }
 
-
         } while (strlen(codEqu) != 6 || flag == 1);
 
         do
         {
+            flag = 0;
+
             printf("\ndigite o codigo de solicitacao (0123): ");
             scanf("%d",&codSol);
 
@@ -195,7 +219,13 @@ void AdicionarElementos (Lista *manutencao)
             {
                 printf("\ttamanho incorreto. Tente novamente.");
             }
-        } while (codSol < 1000 || codSol > 9999);
+
+            if(ExisteCod(manutencao, codSol) == 1)
+            {
+                printf("\t-Este codigo ja existe!");
+                flag = 1;
+            }
+        } while (codSol < 1000 || codSol > 9999 || flag == 1);
 
         do
         {
@@ -262,7 +292,7 @@ void LimparLista(Lista *apague)
 {
     char opcao;
 
-    printf("Tem certeza de que deseja remover todas as solicitações? S | n\n");
+    printf("Tem certeza de que deseja remover todas as solicitacoes?\nS | n\n");
     scanf(" %c", &opcao);
     getchar();
 
@@ -325,7 +355,7 @@ void RemoverElemento(Lista *manutencao)
 {
     int codSol, flag;
 
-    system("clear");
+    system("cls");
 
     printf("REMOVER SOLICITACAO\nitens salvos:\n");
 

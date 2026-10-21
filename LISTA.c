@@ -19,8 +19,8 @@ int main()
     {
         system("cls");
 
-        printf("==================\n\tMENU\n====================\n");
-        printf("1 - Adicionar itens\n2 - Listar itens\n3 - Remover solicitacao\n4 - Limpar lista\n5 - Sair\n");
+        printf("====================\n\tMENU\n====================\n");
+        printf("1 - Adicionar itens\n2 - Listar itens\n3 - Consultar solicitacao\n4 - Remover solicitacao\n5 - Limpar lista\n6 - Sair\n");
         scanf("%i", &opcao);
 
         switch (opcao)
@@ -32,18 +32,26 @@ int main()
             ImprimeLista(manutencao);
             break;
         case 3:
-            RemoverElemento(manutencao);
+            ConsultarSolicitacao(manutencao);
             break;
         case 4:
+            RemoverElemento(manutencao);
+            break;
+        case 5:
             LimparLista(manutencao);
             break;
+        case 6:
+            break;
         default:
-            exit(0);
+            printf("\nOpcao invalida\n");
+            scanf("%i", &opcao);
             break;
         }
-    } while(opcao != 5);
+    } while(opcao != 6);
 
+    LimparListaAux(manutencao);
     free(manutencao);
+    printf("\nprograma encerrado.");
 
     return 0;
 }

@@ -24,10 +24,7 @@ typedef struct lista        // estrutura que percorre a lista
 void flush()
 {
     int c;
-    while ((c = getchar()) != '\n' && c != EOF)
-    {
-
-    };
+    while ((c = getchar()) != '\n' && c != EOF);
 }
 
 Lista* IniciaLista()        // estrutura que inicia a lista
@@ -154,9 +151,19 @@ void AdicionarElementos (Lista *manutencao)
     system("cls");
 
     printf("1 - ADICIONAR EQUIPAMENTOS\n");
-    printf("deseja inserir quantos equipamentos na lista? ");
-    scanf("%i", &quant);
-    flush();
+
+    do
+    {
+        printf("deseja inserir quantos equipamentos na lista? ");
+        scanf("%i", &quant);
+        flush();
+
+        if(quant < 1)
+        {
+            printf("\t- nao\n");
+        }
+    }
+    while(quant < 1);
 
     for(int i = 0; i < quant; i++)
     {
@@ -277,6 +284,41 @@ void AdicionarElementos (Lista *manutencao)
     }
 }
 
+void ConsultarSolicitacao(Lista *manutencao)
+{
+    int codSol, flag;
+    Elo *aux = manutencao ->inicio;
+
+    system("cls");
+    printf("codigos disponiveis: ");
+    while (aux != NULL)
+    {
+        printf("\n NOME -%s", aux ->nomeEqu);
+        printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
+        aux = aux ->proximo;
+    }
+
+    do
+    {
+        flag = 0;
+        printf("Digite o codigo de solicitacao que deseja consultar: \n");
+        scanf("%i", &codSol);
+
+        if(ExisteCod(manutencao, codSol) == 0)
+        {
+            printf("\t- o codigo digitado nao existe\n");
+            flag = 1;
+            scanf("%i", &codSol);
+        }
+        else
+        {
+            printf("coc");
+            scanf("%i", &codSol);
+        }
+    }
+    while (flag == 1);
+}
+
 Elo* AuxTiraDaLista(Elo *antigo)
 {
     Elo *apagar;
@@ -288,28 +330,33 @@ Elo* AuxTiraDaLista(Elo *antigo)
     return antigo;
 }
 
+void LimparListaAux(Lista *apague)
+{
+    int valor;
+
+    while (apague ->inicio != NULL)
+    {
+        valor = apague ->inicio ->codSol;
+        apague ->inicio = AuxTiraDaLista(apague ->inicio);
+
+        printf("REMOVIDO: %i\n", valor);
+    }
+}
+
 void LimparLista(Lista *apague)
 {
     char opcao;
 
-    printf("Tem certeza de que deseja remover todas as solicitacoes?\nS | n\n");
+    printf("Tem certeza de que deseja remover todas as solicitacoes? (S | n)\n");
     scanf(" %c", &opcao);
     getchar();
 
     if(opcao == 's')
     {
-        int valor;
-
-        while (apague ->inicio != NULL)
-        {
-            valor = apague ->inicio ->codSol;
-            apague ->inicio = AuxTiraDaLista(apague ->inicio);
-
-            printf("REMOVIDO: %i\n", valor);
-        }
+        LimparListaAux(apague);
 
         printf("Lista de manutencao limpa! Digite 1 para retornar\n");
-        scanf("%i", &valor);
+        scanf("%c", &opcao);
     }
 }
 

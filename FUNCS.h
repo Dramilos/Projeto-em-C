@@ -279,7 +279,7 @@ void AdicionarElementos (Lista *manutencao)
 
         flush();
 
-        InsereNaLista(manutencao, codSol, codEqu, prioridade, nomeEqu, prioridade);
+        InsereNaLista(manutencao, codSol, codEqu, prioridade, nomeEqu, periodo);
     }
 }
 
@@ -390,25 +390,52 @@ void LimparLista(Lista *apague)
     }
 }
 
-int AlteraPrioPer (Lista *manutencao, int opcao)
+void AlteraPrioPer (Elo *aux, int opcao)       // opcao: 1 = as duas, 2 = so prioridade, 3 = so periodo
 {
+    int prioridade, periodo, flag;
+
+    // comeca com os valores atuais: o que nao for alterado continua igual
+
+    prioridade = aux ->prioridade;
+    periodo = aux ->periodo;
+
     if(opcao < 3)
     {
         do
         {
-            printf("\ndigite a prioridade do equipamento (1 - 3): ");
+            flag = 0;
+
+            printf("\ndigite a nova prioridade do equipamento (1 - 3): ");
             scanf("%d",&prioridade);
 
-            if (prioridade > 3)
+            if (prioridade < 1 || prioridade > 3)
             {
                 printf("\ttamanho incorreto. Tente novamente.");
+                flag = 1;
             }
-        } while (prioridade > 3);
+            else if(opcao == 2)
+            {
+                // conferir se a prioridade digitada pelo usuário condiz com o periodo do equipamento
 
-        if(opcao == 2)
-        {
-            // conferir se a prioridade digitada pelo usuário condiz com o periodo do equipamento
-        }
+                switch (prioridade)
+                {
+                case 1:
+                    if (periodo > 7)
+                    {
+                        printf(" -O periodo atual (%i) nao condiz com a prioridade 1 (1 - 7)", periodo);
+                        flag = 1;
+                    }
+                    break;
+                case 2:
+                    if (periodo > 15)
+                    {
+                        printf(" -O periodo atual (%i) nao condiz com a prioridade 2 (1 - 15)", periodo);
+                        flag = 1;
+                    }
+                    break;
+                }
+            }
+        } while (flag == 1);
     }
 
     if(opcao != 2)
@@ -417,8 +444,14 @@ int AlteraPrioPer (Lista *manutencao, int opcao)
         {
             flag = 0;
 
-            printf("\nqual o periodo de reparo necessario para o equipamento? ");
+            printf("\nqual o novo periodo de reparo necessario para o equipamento? ");
             scanf("%d",&periodo);
+
+            if (periodo < 1)
+            {
+                printf(" -O periodo precisa ser de pelo menos 1 dia");
+                flag = 1;
+            }
 
             switch (prioridade)
             {
@@ -445,6 +478,92 @@ int AlteraPrioPer (Lista *manutencao, int opcao)
                 break;
             }
         } while (flag == 1);
+    }
+
+    // so grava no elo depois que tudo foi validado
+
+    aux ->prioridade = prioridade;
+    aux ->periodo = periodo;
+}
+
+void AlterarSolicitacao(Lista *manutencao)
+{
+    int codSol, opcao, flag;
+    Elo *aux;
+
+    system("cls");
+
+    if(TaVazia(manutencao) == 1)
+    {
+        printf("parece que nao tem nada aqui.\n");
+        system("pause");
+    }
+    else
+    {
+        do
+        {
+            system("cls");
+
+            aux = manutencao ->inicio;
+            printf("codigos disponiveis: ");
+            while (aux != NULL)
+            {
+                printf("\n NOME -%s", aux ->nomeEqu);
+                printf("\n CODIGO DE SOLICITACAO -%i\n", aux ->codSol);
+                aux = aux ->proximo;
+            }
+
+            flag = 0;
+            aux = manutencao ->inicio;
+
+            printf("Digite o codigo de solicitacao que deseja alterar: \n");
+            scanf("%i", &codSol);
+
+            // caminhar pela lista ate chegar no codigo procurado (ou passar dele)
+
+            while ((aux != NULL) && (aux ->codSol < codSol))
+            {
+                aux = aux ->proximo;
+            }
+
+            // chegou no fim ou passou do codigo: nao existe na lista
+
+            if ((aux == NULL) || (aux ->codSol != codSol))
+            {
+                printf("\t- O codigo digitado nao existe!\n");
+                system("pause");
+                flag = 1;
+            }
+            else
+            {
+                system("cls");
+                printf("ALTERANDO ITEM\n\n");
+                printf("\t- ITEM: %s\n", aux ->nomeEqu);
+                printf("\t- PRIORIDADE ATUAL: %i\n", aux ->prioridade);
+                printf("\t- PERIODO ATUAL: %i\n", aux ->periodo);
+
+                do
+                {
+                    printf("\nO que deseja alterar?\n1 - Prioridade e periodo\n2 - Somente prioridade\n3 - Somente periodo\n");
+                    scanf("%i", &opcao);
+
+                    if (opcao < 1 || opcao > 3)
+                    {
+                        printf("\t- Opcao invalida!");
+                    }
+                } while (opcao < 1 || opcao > 3);
+
+                AlteraPrioPer(aux, opcao);
+
+                printf("\nSolicitacao %i alterada!\n", aux ->codSol);
+                printf("\t- PRIORIDADE: %i\n", aux ->prioridade);
+                printf("\t- PERIODO: %i\n", aux ->periodo);
+
+                printf("\nTecle 1 para alterar outra solicitacao, 0 para sair\n");
+                scanf("%i", &flag);
+            }
+        }
+        while (flag == 1);
     }
 }
 

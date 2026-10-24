@@ -7,7 +7,7 @@
 
 int main()
 {
-    system("cls");
+    system("clear");
 
     Lista *manutencao;
     int opcao;
@@ -17,10 +17,10 @@ int main()
 
     do
     {
-        system("cls");
+        system("clear");
 
         printf("====================\n\tMENU\n====================\n");
-        printf("1 - Adicionar itens\n2 - Listar itens\n3 - Consultar solicitacao\n4 - Remover solicitacao\n5 - Limpar lista\n6 - Alterar prioridade/periodo\n7 - Sair\n");
+        printf("1 - Adicionar itens\n2 - Listar itens\n3 - Consultar solicitacao\n4 - Alterar prioridade/periodo\n5 - Listar por prioridade\n6 - Remover solicitacao\n7 - Limpar lista\n8 - Sair\n");
         scanf("%i", &opcao);
 
         switch (opcao)
@@ -35,22 +35,25 @@ int main()
             ConsultarSolicitacao(manutencao);
             break;
         case 4:
-            RemoverElemento(manutencao);
-            break;
-        case 5:
-            LimparLista(manutencao);
-            break;
-        case 6:
             AlterarSolicitacao(manutencao);
             break;
+        case 5:
+            ListaPrioridade(manutencao);
+            break;
+        case 6:
+            RemoverElemento(manutencao);
+            break;
         case 7:
+            LimparLista(manutencao);
+            break;
+        case 8:
             break;
         default:
             printf("\nOpcao invalida\n");
             scanf("%i", &opcao);
             break;
         }
-    } while(opcao != 7);
+    } while(opcao != 8);
 
     LimparListaAux(manutencao);
     free(manutencao);

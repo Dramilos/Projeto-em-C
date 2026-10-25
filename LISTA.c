@@ -7,7 +7,7 @@
 
 int main()
 {
-    system("clear");
+    system("cls");
 
     Lista *manutencao;
     int opcao;
@@ -17,7 +17,7 @@ int main()
 
     do
     {
-        system("clear");
+        system("cls");
 
         printf("====================\n\tMENU\n====================\n");
         printf("1 - Adicionar itens\n2 - Listar itens\n3 - Consultar solicitacao\n4 - Alterar prioridade/periodo\n5 - Listar por prioridade\n6 - Remover solicitacao\n7 - Limpar lista\n8 - Sair\n");

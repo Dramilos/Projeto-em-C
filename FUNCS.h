@@ -1,23 +1,23 @@
 #ifndef FUNCS_H_INCLUDED
 #define FUNCS_H_INCLUDED
 
-typedef struct elo          // estrutura dos dados que v�o pra lista
+typedef struct elo
 {
 
-    int codSol;         // informacao que sera guardada na lista]
+    int codSol;
     char codEqu[7];
     char nomeEqu[20];
     int periodo;
     int prioridade;
 
-    struct elo *proximo;    // ponteiro que aponta para o proximo elo da lista
+    struct elo *proximo;
 
 } Elo;
 
-typedef struct lista        // estrutura que percorre a lista
+typedef struct lista
 {
 
-    Elo *inicio;            // ponteiro que aponta somente pro comeco da lista
+    Elo *inicio;
 
 } Lista;
 
@@ -27,14 +27,14 @@ void flush()
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
-Lista* IniciaLista()        // estrutura que inicia a lista
+Lista* IniciaLista()
 {
 
     return NULL;
 
 }
 
-Lista* CriaUmaLista()       // estrutura que cria uma lista qualquer
+Lista* CriaUmaLista()
 {
 
     Lista *aux;
@@ -60,7 +60,6 @@ void InsereNaLista(Lista *manutencao, int codSol, char codEqu[], int prioridade,
     Elo *NovoElo, *aux1, *aux2;
     NovoElo = (Elo *) malloc(sizeof(Elo));
 
-    // passando as informaçoes pro novo elo
 
     NovoElo ->codSol = codSol;
     strcpy(NovoElo ->codEqu, codEqu);
@@ -68,12 +67,10 @@ void InsereNaLista(Lista *manutencao, int codSol, char codEqu[], int prioridade,
     strcpy(NovoElo ->nomeEqu, nomeEqu);
     NovoElo ->periodo = periodo;
 
-    // logica de inserçao
 
     aux1 = manutencao ->inicio;
     aux2 = NULL;
 
-    // caminhar pela lista até achar a posicao necessária
 
     while ((aux1 != NULL) && (NovoElo ->codSol > aux1 ->codSol))
     {
@@ -98,7 +95,7 @@ void ImprimeLista(Lista *manutencaozinha)
     Elo *aux = manutencaozinha ->inicio;
     int cont = 1;
 
-    system("clear");
+    system("cls");
     printf("\n-=-=-=-=-=-\n IMPRIMINDO NOME DOS ELEMENTOS INSERIDOS\n-=-=-=-=-=-\n");
 
     if(manutencaozinha ->inicio == NULL)
@@ -126,14 +123,12 @@ int ExisteCod(Lista *manutencao, int codSol)
 
     aux = manutencao ->inicio;
 
-    // caminhar pela lista ate chegar no codigo procurado (ou passar dele)
 
     while ((aux != NULL) && (aux ->codSol < codSol))
     {
         aux = aux ->proximo;
     }
 
-    // chegou no fim ou passou do codigo: nao existe na lista
 
     if ((aux == NULL) || (aux ->codSol != codSol))
     {
@@ -147,7 +142,7 @@ void AdicionarElementos (Lista *manutencao)
 {
     int quant, flag = 0;
 
-    system("clear");
+    system("cls");
 
     printf("1 - ADICIONAR EQUIPAMENTOS\n");
 
@@ -169,12 +164,12 @@ void AdicionarElementos (Lista *manutencao)
         int codSol, periodo, prioridade, flag;
         char codEqu[15], nomeEqu[21];
 
-        system("clear");
+        system("cls");
 
         printf("EQUIPAMENTO %i", i + 1);
         printf("\ndigite o nome do equipamento: ");
         fgets(nomeEqu, sizeof(nomeEqu), stdin);
-        nomeEqu[strcspn(nomeEqu, "\n")] = '\0';         // tira o enter da string
+        nomeEqu[strcspn(nomeEqu, "\n")] = '\0';
 
         do
         {
@@ -288,7 +283,7 @@ void ConsultarSolicitacao(Lista *manutencao)
     int codSol, flag;
     Elo *aux;
 
-    system("clear");
+    system("cls");
 
     if(TaVazia(manutencao) == 1)
     {
@@ -299,7 +294,7 @@ void ConsultarSolicitacao(Lista *manutencao)
     {
         do
         {
-            system("clear");
+            system("cls");
 
             aux = manutencao ->inicio;
             printf("codigos disponiveis: ");
@@ -316,14 +311,12 @@ void ConsultarSolicitacao(Lista *manutencao)
             printf("Digite o codigo de solicitacao que deseja consultar: \n");
             scanf("%i", &codSol);
 
-            // caminhar pela lista ate chegar no codigo procurado (ou passar dele)
 
             while ((aux != NULL) && (aux ->codSol < codSol))
             {
                 aux = aux ->proximo;
             }
 
-            // chegou no fim ou passou do codigo: nao existe na lista
 
             if ((aux == NULL) || (aux ->codSol != codSol))
             {
@@ -333,7 +326,7 @@ void ConsultarSolicitacao(Lista *manutencao)
             }
             else
             {
-                system("clear");
+                system("cls");
                 printf("LISTANDO ITEM\n\n");
                 printf("\t- ITEM: %s\n", aux ->nomeEqu);
                 printf("\t- CODIGO DO EQUIPAMENTO: %s\n", aux ->codEqu);
@@ -395,21 +388,15 @@ void InserePrioridade (Lista *listaPrioridade, char nomeEqu[], int prioridade, i
     Elo *NovoElo, *aux1, *aux2;
     NovoElo = (Elo *) malloc(sizeof(Elo));
 
-    // passando as informaçoes pro novo elo
 
     strcpy(NovoElo ->nomeEqu, nomeEqu);
     NovoElo ->prioridade = prioridade;
     NovoElo ->periodo = periodo;
 
-    // logica de inserçao
 
     aux1 = listaPrioridade ->inicio;
     aux2 = NULL;
 
-    // caminha até:
-    // a lista acabar, e a prioridade do elemento novo for maior do que a do elemento atual
-    // ou, se a prioridade for igual, conferir se o período é maior do que o do elemento atual
-    // dessa forma, ele organiza a lista por prioridade, depois periodo, depois codigo de solicitacao.
 
     while ((aux1 != NULL) && ((aux1 ->prioridade < NovoElo ->prioridade) || (aux1 ->prioridade == NovoElo ->prioridade && aux1 ->periodo < NovoElo ->periodo)))
     {
@@ -435,16 +422,13 @@ void ListaPrioridade (Lista *manutencao)
     Lista *listaPrioridade;
     int gondola;
 
-    system("clear");
+    system("cls");
 
-    // cria essa lista nova de prioridade
     listaPrioridade = IniciaLista();
     listaPrioridade = CriaUmaLista();
 
-    // auxiliar pra percorrer a lista de manutençao
     Elo *aux;
 
-    // encontrar elementos na lista original condizentes com cada prioridade
     for(int i = 1; i <= 3; i++)
     {
         printf("adicionando prioridade %i", i);
@@ -461,11 +445,10 @@ void ListaPrioridade (Lista *manutencao)
     }
 
 
-    // imprimir a lista
     Elo *aux1 = listaPrioridade ->inicio;
     int cont = 1;
 
-    system("clear");
+    system("cls");
     printf("\n-=-=-=-=-=-\nIMPRIMINDO POR PRIORIDADE\n-=-=-=-=-=-\n");
 
     if(listaPrioridade ->inicio == NULL)
@@ -491,11 +474,10 @@ void ListaPrioridade (Lista *manutencao)
     free(listaPrioridade);
 }
 
-void AlteraPrioPer (Elo *aux, int opcao)       // opcao: 1 = as duas, 2 = so prioridade, 3 = so periodo
+void AlteraPrioPer (Elo *aux, int opcao)
 {
     int prioridade, periodo, flag;
 
-    // comeca com os valores atuais: o que nao for alterado continua igual
 
     prioridade = aux ->prioridade;
     periodo = aux ->periodo;
@@ -516,7 +498,6 @@ void AlteraPrioPer (Elo *aux, int opcao)       // opcao: 1 = as duas, 2 = so pri
             }
             else if(opcao == 2)
             {
-                // conferir se a prioridade digitada pelo usuário condiz com o periodo do equipamento
 
                 switch (prioridade)
                 {
@@ -581,7 +562,6 @@ void AlteraPrioPer (Elo *aux, int opcao)       // opcao: 1 = as duas, 2 = so pri
         } while (flag == 1);
     }
 
-    // so grava no elo depois que tudo foi validado
 
     aux ->prioridade = prioridade;
     aux ->periodo = periodo;
@@ -592,7 +572,7 @@ void AlterarSolicitacao(Lista *manutencao)
     int codSol, opcao, flag;
     Elo *aux;
 
-    system("clear");
+    system("cls");
 
     if(TaVazia(manutencao) == 1)
     {
@@ -603,7 +583,7 @@ void AlterarSolicitacao(Lista *manutencao)
     {
         do
         {
-            system("clear");
+            system("cls");
 
             aux = manutencao ->inicio;
             printf("codigos disponiveis: ");
@@ -620,14 +600,12 @@ void AlterarSolicitacao(Lista *manutencao)
             printf("Digite o codigo de solicitacao que deseja alterar: \n");
             scanf("%i", &codSol);
 
-            // caminhar pela lista ate chegar no codigo procurado (ou passar dele)
 
             while ((aux != NULL) && (aux ->codSol < codSol))
             {
                 aux = aux ->proximo;
             }
 
-            // chegou no fim ou passou do codigo: nao existe na lista
 
             if ((aux == NULL) || (aux ->codSol != codSol))
             {
@@ -637,7 +615,7 @@ void AlterarSolicitacao(Lista *manutencao)
             }
             else
             {
-                system("clear");
+                system("cls");
                 printf("ALTERANDO ITEM\n\n");
                 printf("\t- ITEM: %s\n", aux ->nomeEqu);
                 printf("\t- PRIORIDADE ATUAL: %i\n", aux ->prioridade);
@@ -668,14 +646,13 @@ void AlterarSolicitacao(Lista *manutencao)
     }
 }
 
-int RemoveDaLista(Lista *manutencao, int codSol)     // retorna 1 se removeu, 0 se nao achou
+int RemoveDaLista(Lista *manutencao, int codSol)
 {
     Elo *atual, *anterior;
 
     atual = manutencao ->inicio;
     anterior = NULL;
 
-    // caminhar pela lista ate chegar no codigo procurado (ou passar dele)
 
     while ((atual != NULL) && (atual ->codSol < codSol))
     {
@@ -683,22 +660,20 @@ int RemoveDaLista(Lista *manutencao, int codSol)     // retorna 1 se removeu, 0 
         atual = atual ->proximo;
     }
 
-    // chegou no fim ou passou do codigo: nao existe na lista
 
     if ((atual == NULL) || (atual ->codSol != codSol))
     {
         return 0;
     }
 
-    // religar a lista pulando o elo que vai ser apagado
 
     if (anterior == NULL)
     {
-        manutencao ->inicio = atual ->proximo;      // era o primeiro da lista
+        manutencao ->inicio = atual ->proximo;
     }
     else
     {
-        anterior ->proximo = atual ->proximo;       // estava no meio ou no fim
+        anterior ->proximo = atual ->proximo;
     }
 
     free(atual);
@@ -710,7 +685,7 @@ void RemoverElemento(Lista *manutencao)
 {
     int codSol, flag;
 
-    system("clear");
+    system("cls");
 
     printf("REMOVER SOLICITACAO\nitens salvos:\n");
 
